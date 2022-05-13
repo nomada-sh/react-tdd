@@ -61,7 +61,7 @@ const expectRepo = (repo: GitHubRepo) => {
   ).toBeInTheDocument();
 };
 
-const expectLoadingToNotBeVisible = async () => {
+const waitForLoadingToNotBeVisible = async () => {
   await waitFor(() => {
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
   });
@@ -175,7 +175,7 @@ describe('When query is entered and search button is clicked', () => {
     changeQuery('test');
     clickSearchButton();
 
-    await expectLoadingToNotBeVisible();
+    await waitForLoadingToNotBeVisible();
 
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
     expect(
@@ -187,7 +187,7 @@ describe('When query is entered and search button is clicked', () => {
     changeQuery('test');
     clickSearchButton();
 
-    await expectLoadingToNotBeVisible();
+    await waitForLoadingToNotBeVisible();
 
     expectRepo(fakeRepo);
   });
@@ -205,11 +205,11 @@ describe('When query is entered and search button is clicked', () => {
     changeQuery('test');
     clickSearchButton();
 
-    await expectLoadingToNotBeVisible();
+    await waitForLoadingToNotBeVisible();
 
     clickNextPageButton();
 
-    await expectLoadingToNotBeVisible();
+    await waitForLoadingToNotBeVisible();
 
     expectRepo(nextFakeRepo);
 
@@ -226,31 +226,31 @@ describe('When query is entered and search button is clicked', () => {
     changeQuery('many');
     clickSearchButton();
 
-    await expectLoadingToNotBeVisible();
+    await waitForLoadingToNotBeVisible();
 
     expect(screen.getAllByRole('row').length).toBe(31);
 
     clickNextPageButton();
 
-    await expectLoadingToNotBeVisible();
+    await waitForLoadingToNotBeVisible();
 
     expect(screen.getAllByRole('row').length).toBe(31);
 
     clickNextPageButton();
 
-    await expectLoadingToNotBeVisible();
+    await waitForLoadingToNotBeVisible();
 
     expect(screen.getAllByRole('row').length).toBe(6);
 
     clickPreviousPageButton();
 
-    await expectLoadingToNotBeVisible();
+    await waitForLoadingToNotBeVisible();
 
     expect(screen.getAllByRole('row').length).toBe(31);
 
     clickPreviousPageButton();
 
-    await expectLoadingToNotBeVisible();
+    await waitForLoadingToNotBeVisible();
 
     expect(screen.getAllByRole('row').length).toBe(31);
   });
@@ -259,7 +259,7 @@ describe('When query is entered and search button is clicked', () => {
     changeQuery('test');
     clickSearchButton();
 
-    await expectLoadingToNotBeVisible();
+    await waitForLoadingToNotBeVisible();
 
     expectRepo(fakeRepo);
 
@@ -267,7 +267,7 @@ describe('When query is entered and search button is clicked', () => {
 
     clickSearchButton();
 
-    await expectLoadingToNotBeVisible();
+    await waitForLoadingToNotBeVisible();
 
     expectRepo(fakeRepo);
   });
