@@ -254,4 +254,21 @@ describe('When query is entered and search button is clicked', () => {
 
     expect(screen.getAllByRole('row').length).toBe(31);
   });
+
+  it('should render first page when search button is clicked again', async () => {
+    changeQuery('test');
+    clickSearchButton();
+
+    await expectLoadingToNotBeVisible();
+
+    expectRepo(fakeRepo);
+
+    clickNextPageButton();
+
+    clickSearchButton();
+
+    await expectLoadingToNotBeVisible();
+
+    expectRepo(fakeRepo);
+  });
 });

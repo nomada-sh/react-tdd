@@ -78,7 +78,14 @@ export function GitHubRepos() {
           type="text"
           placeholder="Search GitHub repositories"
         />
-        <button onClick={getRepos}>Search</button>
+        <button
+          onClick={() => {
+            pageRef.current = 1;
+            getRepos();
+          }}
+        >
+          Search
+        </button>
       </div>
       <div
         style={{
