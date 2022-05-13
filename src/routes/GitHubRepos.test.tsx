@@ -61,6 +61,12 @@ const expectRepo = (repo: GitHubRepo) => {
   ).toBeInTheDocument();
 };
 
+const expectLoadingToNotBeVisible = async () => {
+  await waitFor(() => {
+    expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+  });
+};
+
 const fakeRepo: GitHubRepo = {
   id: 1,
   name: 'Fake Repo',
@@ -83,6 +89,19 @@ const nextFakeRepo: GitHubRepo = {
   forks_count: 333,
 };
 
+const fakeRepos: GitHubRepo[] = new Array(65).fill(0).map((_, i) => {
+  return {
+    id: i + 1,
+    name: `Fake Repo ${i + 1}`,
+    description: `Fake Repo Description ${i + 1}`,
+    owner: {
+      login: `Fake Owner ${i + 1}`,
+    },
+    stargazers_count: i + 1,
+    forks_count: i + 1,
+  };
+});
+
 const server = setupServer(
   rest.get('https://api.github.com/search/repositories', (req, res, ctx) => {
     const query = req.url.searchParams.get('q');
@@ -91,13 +110,21 @@ const server = setupServer(
     let page: any = req.url.searchParams.get('page');
     page = page ? parseInt(page, 10) : 1;
 
+    let perPage: any = req.url.searchParams.get('per_page');
+    perPage = perPage ? parseInt(perPage, 10) : 30;
+
+    let items: GitHubRepo[] = page > 1 ? [nextFakeRepo] : [fakeRepo];
+
+    if (query === 'many')
+      items = fakeRepos.slice((page - 1) * perPage, page * perPage);
+
     return res(
       ctx.json<{
         total_count: number;
         items: GitHubRepo[];
       }>({
         total_count: 1,
-        items: page > 1 ? [nextFakeRepo] : [fakeRepo],
+        items,
       })
     );
   })
@@ -148,9 +175,7 @@ describe('When query is entered and search button is clicked', () => {
     changeQuery('test');
     clickSearchButton();
 
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    });
+    await expectLoadingToNotBeVisible();
 
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
     expect(
@@ -162,9 +187,7 @@ describe('When query is entered and search button is clicked', () => {
     changeQuery('test');
     clickSearchButton();
 
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    });
+    await expectLoadingToNotBeVisible();
 
     expectRepo(fakeRepo);
   });
@@ -182,15 +205,11 @@ describe('When query is entered and search button is clicked', () => {
     changeQuery('test');
     clickSearchButton();
 
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    });
+    await expectLoadingToNotBeVisible();
 
     clickNextPageButton();
 
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-    });
+    await expectLoadingToNotBeVisible();
 
     expectRepo(nextFakeRepo);
 
@@ -201,5 +220,38 @@ describe('When query is entered and search button is clicked', () => {
     });
 
     expectRepo(fakeRepo);
+  });
+
+  it('should render many results', async () => {
+    changeQuery('many');
+    clickSearchButton();
+
+    await expectLoadingToNotBeVisible();
+
+    expect(screen.getAllByRole('row').length).toBe(31);
+
+    clickNextPageButton();
+
+    await expectLoadingToNotBeVisible();
+
+    expect(screen.getAllByRole('row').length).toBe(31);
+
+    clickNextPageButton();
+
+    await expectLoadingToNotBeVisible();
+
+    expect(screen.getAllByRole('row').length).toBe(6);
+
+    clickPreviousPageButton();
+
+    await expectLoadingToNotBeVisible();
+
+    expect(screen.getAllByRole('row').length).toBe(31);
+
+    clickPreviousPageButton();
+
+    await expectLoadingToNotBeVisible();
+
+    expect(screen.getAllByRole('row').length).toBe(31);
   });
 });
