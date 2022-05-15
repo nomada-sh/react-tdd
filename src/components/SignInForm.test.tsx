@@ -2,21 +2,6 @@
 import { SignInForm } from './SignInForm';
 import { fireEvent, render, screen } from '@testing-library/react';
 
-const clickSubmit = () => {
-  const signInButton = screen.getByRole('button', { name: 'Sign In' });
-  fireEvent.click(signInButton);
-};
-
-const changeEmail = (email: string) => {
-  const emailInput = screen.getByPlaceholderText('Email');
-  fireEvent.change(emailInput, { target: { value: email } });
-};
-
-const changePassword = (password: string) => {
-  const passwordInput = screen.getByPlaceholderText('Password');
-  fireEvent.change(passwordInput, { target: { value: password } });
-};
-
 describe('When component is mounted', () => {
   beforeEach(() => {
     render(<SignInForm onSubmit={jest.fn()} />);
@@ -94,3 +79,22 @@ describe('When a valid email and password are entered and form is submitted', ()
     });
   });
 });
+
+/**
+ * Helper functions
+ */
+
+const clickSubmit = () => {
+  const signInButton = screen.getByRole('button', { name: 'Sign In' });
+  fireEvent.click(signInButton);
+};
+
+const changeEmail = (email: string) => {
+  const emailInput = screen.getByPlaceholderText('Email');
+  fireEvent.change(emailInput, { target: { value: email } });
+};
+
+const changePassword = (password: string) => {
+  const passwordInput = screen.getByPlaceholderText('Password');
+  fireEvent.change(passwordInput, { target: { value: password } });
+};

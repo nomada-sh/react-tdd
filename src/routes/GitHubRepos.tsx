@@ -1,20 +1,10 @@
 import axios from 'axios';
 import { useCallback, useRef, useState } from 'react';
+import { GitHubRepo } from '../types';
 
 const gh = axios.create({
   baseURL: 'https://api.github.com',
 });
-
-export type GitHubRepo = {
-  id: number;
-  name: string;
-  description: string;
-  stargazers_count: number;
-  forks_count: number;
-  owner: {
-    login: string;
-  };
-};
 
 export function GitHubRepos() {
   const [query, setQuery] = useState('');
