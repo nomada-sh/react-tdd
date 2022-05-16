@@ -31,11 +31,11 @@ Esto ejecutará las pruebas en modo `watch`, es decir, se ejecutarán cada vez q
 
 ## Pruebas a componentes
 
-Ejemplos:
+**Ejemplos:**
 
 - [SignInForm](./src/components/SignInForm.test.tsx)
 
-Pasos para prueba a un componente:
+**Pasos:**
 
 1. Definir criterios de aceptación, es decir, lo que debe de pasar para que la prueba se cumpla. Por ejemplo:
 
@@ -92,11 +92,11 @@ describe('When an invalid email is entered and form is submitted', () => {
 En estas pruebas usamos [MSW (Mock Service Worker)](https://mswjs.io/docs/getting-started/install) para simular
 las llamadas a API que se realizan usando fetch, axios, etc.
 
-Ejemplos:
+**Ejemplos:**
 
 - [GitHubRepos](./src/routes/GitHubRepos.test.tsx)
 
-Pasos:
+**Pasos:**
 
 1. Seguir los pasos 1-2 de [pruebas a componentes](#pruebas-a-componentes).
 
@@ -143,6 +143,6 @@ Aqui no se prueba la interacción con el usuario, sino la lógica interna de un 
 
 Se realizan siguiendo los mismos pasos que las [pruebas a componentes](#pruebas-a-componentes).
 
-Ejemplos:
+**Ejemplos:**
 
 - [useCounter](./src/hooks/useCounter.test.ts)
