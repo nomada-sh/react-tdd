@@ -37,60 +37,85 @@ Esto ejecutará las pruebas en modo `watch`, es decir, se ejecutarán cada vez q
 
 **Pasos:**
 
-1. Definir criterios de aceptación, es decir, lo que debe de pasar para que la prueba se cumpla. Por ejemplo:
+1. Escribe el siguiente comando en la consola:
 
-```txt
-When an invalid email is entered and the form is submitted:
-  It should render an error message.
-  It should not call onSubmit.
-```
+    ```bash
+    yarn test
+    ```
 
-2. Crear archivo de prueba, este archivo normalmente se llama `ComponentName.test.tsx` y se guarda al mismo nivel que el componente (Esto depende de la estructura de tu proyecto). Por ejemplo:
+    Esto ejecutará las pruebas en modo `watch`, es decir, se ejecutarán cada vez que se haga un cambio en el código.
 
-![Nombre de archivo de prueba](./images/test-file-name.png)
+2. Establecer los criterios de aceptación, es decir, lo que debe pasar para que la prueba tenga éxito.
 
-3. Escribir el código de prueba, es decir, el código que se ejecutará para verificar que el componente cumpla con los criterios de aceptación. Por ejemplo:
+    **Ejemplo:**
 
-```tsx
-import { SignInForm } from './SignInForm';
-import { fireEvent, render, screen } from '@testing-library/react';
+    ```txt
+    When an invalid email is entered and the form is submitted:
+      It should render an error message.
+      It should not call onSubmit.
+    ```
 
-describe('When an invalid email is entered and form is submitted', () => {
-  it('should render an error message', async () => {
-    render(<SignInForm onSubmit={jest.fn()} />);
+3. Crear un archivo de prueba llamado `ComponentName.test.tsx` y guardarlo en el mismo nivel que el componente (Esto depende de la estructura de tu proyecto).
 
-    fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'invalid' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Sign In' }));
+    **Ejemplo:**
 
-    expect(screen.getByText('Email is not valid.')).toBeInTheDocument();
-  });
+    ![Nombre de archivo de prueba](./images/test-file-name.png)
 
-  it('should not call onSubmit', async () => {
-    const onSubmit = jest.fn();
-    render(<SignInForm onSubmit={onSubmit} />);
+4. Escribir el código de las pruebas, es decir, el código que se ejecutará para verificar que el componente cumpla con los criterios de aceptación.
 
-    fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'invalid' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Sign In' }));
+    **Ejemplo:**
 
-    expect(onSubmit).not.toHaveBeenCalled();
-  });
-});
-```
+    ```tsx
+    import { SignInForm } from './SignInForm';
+    import { fireEvent, render, screen } from '@testing-library/react';
 
-5. Ejecutar la prueba, escribiendo `yarn test` en la consola. Lo cual iniciará la ejecución de las pruebas en modo `watch`.
+    describe('When an invalid email is entered and form is submitted', () => {
+      it('should render an error message', async () => {
+        render(<SignInForm onSubmit={jest.fn()} />);
 
-6. Implementar los minimos requerimientos del componente para lograr que las pruebas sean exitosas. Cuando todas las pruebas pasan deberia de verse de la siguiente forma:
+        fireEvent.change(
+          screen.getByPlaceholderText('Email'),
+          { target: { value: 'invalid' } }
+        );
 
-![Pruebas de componente pasando](./images/component-tests-passing.png)
+        fireEvent.click(
+          screen.getByRole('button', { name: 'Sign In' })
+        );
 
-7. Ahora que las pruebas son exitosas, podemos refactorizar el código del componente, por ejemplo, mover partes del componente a otros componentes, mejorar la calidad del código, etc.
+        expect(screen.getByText('Email is not valid.')).toBeInTheDocument();
+      });
 
-> **Es importante que en este punto se realice esa refactorización, ya que ahora tenemos pruebas que nos aseguran que el componente seguira cumpliendo con los criterios de aceptación.**
+      it('should not call onSubmit', async () => {
+        const onSubmit = jest.fn();
+        render(<SignInForm onSubmit={onSubmit} />);
+
+        fireEvent.change(
+          screen.getByPlaceholderText('Email'),
+          { target: { value: 'invalid' } }
+        );
+
+        fireEvent.click(
+          screen.getByRole('button', { name: 'Sign In' })
+        );
+
+        expect(onSubmit).not.toHaveBeenCalled();
+      });
+    });
+    ```
+
+5. Implementar las minimas funcionalidades requeridas del componente hasta que todas las pruebas sean exitosas.
+
+    **Ejemplo de pruebas exitosas:**
+
+    ![Pruebas de componente pasando](./images/component-tests-passing.png)
+
+6. Ahora que las pruebas son exitosas, podemos refactorizar el código del componente, por ejemplo, mover partes del componente a otros componentes, mejorar la calidad del código, etc.
+
+    > **Es importante que hasta este punto se realice esta refactorización, ya que ahora tenemos pruebas que nos aseguran que el componente seguira cumpliendo con los criterios de aceptación.**
 
 ## Pruebas a componentes con llamadas a API
 
-En estas pruebas usamos [MSW (Mock Service Worker)](https://mswjs.io/docs/getting-started/install) para simular
-las llamadas a API que se realizan usando fetch, axios, etc.
+En estas pruebas usamos [MSW (Mock Service Worker)](https://mswjs.io/docs/getting-started/install) el cual nos permite interceptar las llamadas a API (con fetch, axios, etc.) y responder con una respuesta falsa.
 
 **Ejemplos:**
 
@@ -98,50 +123,58 @@ las llamadas a API que se realizan usando fetch, axios, etc.
 
 **Pasos:**
 
-1. Seguir los pasos 1-2 de [pruebas a componentes](#pruebas-a-componentes).
+1. Seguir los pasos 1-3 de [pruebas a componentes](#pruebas-a-componentes).
 
-2. Crear servidor de pruebas que simule las llamadas a API usando [MSW](https://mswjs.io/docs/getting-started/install). Por ejemplo:
+2. Configurar el servicio de pruebas con [MSW](https://mswjs.io/docs/getting-started/install) (Esta configuración puede hacerse en un archivo aparte).
 
-```tsx
-import { rest } from 'msw';
-import { setupServer } from 'msw/node';
+    **Ejemplo:**
 
-const server = setupServer(
-  rest.get('https://api.github.com/search/repositories', (req, res, ctx) => {
-    return res(
-      ctx.json({
-        total_count: 1,
-        items: [
-          {
-            id: 1,
-            name: 'test',
-            description: 'test',
-            stargazers_count: 12,
-            forks_count: 10,
-            owner: {
-              login: 'test'
-            }
-          },
-        ],
+    ```tsx
+    import { rest } from 'msw';
+    import { setupServer } from 'msw/node';
+
+    export const server = setupServer(
+      rest.get('https://api.github.com/search/repositories', (req, res, ctx) => {
+        return res(
+          ctx.json({
+            total_count: 1,
+            items: [
+              {
+                id: 1,
+                name: 'test',
+                description: 'test',
+                stargazers_count: 12,
+                forks_count: 10,
+                owner: {
+                  login: 'test'
+                }
+              },
+            ],
+          })
+        );
       })
     );
-  })
-);
+    ```
 
-beforeAll(() => server.listen())
+3. Para que el servicio de pruebas funcione, debemos importarlo en el archivo de pruebas y iniciarlo antes de todas las pruebas.
 
-afterEach(() => server.resetHandlers())
+    **Ejemplo:**
 
-afterAll(() => server.close())
-```
+    ```tsx
+    import { server } from '../mocks/GitHubRepos';
 
-3. Seguir los pasos 3-7 de [pruebas a componentes](#pruebas-a-componentes).
+    beforeAll(() => server.listen());
+    afterEach(() => server.resetHandlers());
+    afterAll(() => server.close());
+    ```
+
+4. Seguir los pasos 4-6 de [pruebas a componentes](#pruebas-a-componentes).
 
 ## Pruebas a hooks
 
 Aqui no se prueba la interacción con el usuario, sino la lógica interna de un hook.
 
-Se realizan siguiendo los mismos pasos que las [pruebas a componentes](#pruebas-a-componentes).
+Se realizan siguiendo los mismos pasos de [pruebas a componentes](#pruebas-a-componentes).
 
 **Ejemplos:**
 
