@@ -2,9 +2,10 @@ import { useState } from 'react';
 
 export interface SignInFormProps {
   onSubmit: (params: { email: string; password: string }) => void;
+  error?: string | Error | null;
 }
 
-export function SignInForm({ onSubmit }: SignInFormProps) {
+export function SignInForm({ onSubmit, error }: SignInFormProps) {
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
@@ -90,7 +91,20 @@ export function SignInForm({ onSubmit }: SignInFormProps) {
         ) : null}
       </div>
 
-      <button type="submit">Sign In</button>
+      <button
+        style={{
+          marginBottom: 10,
+        }}
+        type="submit"
+      >
+        Sign In
+      </button>
+
+      {error ? (
+        <p style={{ color: 'red' }}>
+          {typeof error === 'string' ? error : error.message}
+        </p>
+      ) : null}
     </form>
   );
 }

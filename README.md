@@ -29,18 +29,62 @@ yarn test
 
 Esto ejecutará las pruebas en modo `watch`, es decir, se ejecutarán cada vez que se haga un cambio en el código.
 
-## Ejemplos
+## Pruebas a componentes
 
-### Pruebas a componentes
+Ejemplos:
 
-[SignInForm](./src/components/SignInForm.test.tsx)
+- [SignInForm](./src/components/SignInForm.test.tsx)
 
-### Pruebas a componentes con llamadas a API
+Pasos para hacer tu primera prueba a un componente:
+
+1. Definir criterios de aceptación, es decir, lo que debe de pasar para que la prueba se cumpla.
+
+```txt
+When an invalid email is entered and the form is submitted:
+  It should render an error message.
+  It should not call onSubmit.
+```
+
+2. Crear archivo de prueba, este archivo normalmente se llama `ComponentName.test.tsx` y se guarda al mismo nivel que el componente (Esto depende de la estructura de tu proyecto).
+
+3. Escribir el código de prueba, es decir, el código que se ejecutará para verificar que el componente cumpla con los criterios de aceptación.
+
+```tsx
+import { SignInForm } from './SignInForm';
+import { fireEvent, render, screen } from '@testing-library/react';
+
+describe('When an invalid email is entered and form is submitted', () => {
+  it('should render an error message', async () => {
+    render(<SignInForm onSubmit={jest.fn()} />);
+
+    changeEmail('invalid');
+    clickSubmit();
+
+    expect(screen.getByText('Email is not valid.')).toBeInTheDocument();
+  });
+
+  it('should not call onSubmit', async () => {
+    const onSubmit = jest.fn();
+    render(<SignInForm onSubmit={onSubmit} />);
+
+    changeEmail('invalid');
+    clickSubmit();
+
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+});
+```
+
+## Pruebas a componentes con llamadas a API
 
 En estas pruebas usamos [MSW (Mock Service Worker)](https://mswjs.io/docs/getting-started/install) para simular las llamadas a una API.
 
-[GitHubRepos](./src/routes/GitHubRepos.test.tsx)
+Ejemplos:
 
-### Pruebas a hooks
+- [GitHubRepos](./src/routes/GitHubRepos.test.tsx)
 
-[useCounter](./src/hooks/useCounter.test.ts)
+## Pruebas a hooks
+
+Ejemplos:
+
+- [useCounter](./src/hooks/useCounter.test.ts)

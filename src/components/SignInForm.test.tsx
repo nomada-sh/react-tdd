@@ -20,6 +20,25 @@ describe('When component is mounted', () => {
   });
 });
 
+describe('When error prop is passed', () => {
+  it('should render an error message when is an string', () => {
+    render(<SignInForm error="Error message" onSubmit={jest.fn()} />);
+    expect(screen.getByText('Error message')).toBeInTheDocument();
+  });
+
+  it('should render an error message when instance of Error', () => {
+    render(
+      <SignInForm error={new Error('Error message')} onSubmit={jest.fn()} />
+    );
+    expect(screen.getByText('Error message')).toBeInTheDocument();
+  });
+
+  it('should not render an error message when is null', () => {
+    render(<SignInForm error={null} onSubmit={jest.fn()} />);
+    expect(screen.queryByText('Error message')).not.toBeInTheDocument();
+  });
+});
+
 describe('When an invalid email is entered and form is submitted', () => {
   it('should render an error message', async () => {
     render(<SignInForm onSubmit={jest.fn()} />);
