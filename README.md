@@ -139,7 +139,7 @@ afterAll(() => server.close())
 
 ## Pruebas a hooks
 
-En estas pruebas, no se prueba la interacción con el usuario, sino que se prueba la lógica interna de un hook.
+Aqui no se prueba la interacción con el usuario, sino la lógica interna de un hook.
 
 Se realizan siguiendo los mismos pasos que las [pruebas a componentes](#pruebas-a-componentes).
 
