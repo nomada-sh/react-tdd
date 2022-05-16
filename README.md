@@ -1,4 +1,4 @@
-# React pruebas unitarias
+# Pruebas en React
 
 ## Requerimientos
 
