@@ -9,7 +9,7 @@ Antes de hacer pruebas con React, debes de tener instaladas las siguientes depen
 - [@testing-library/user-event](https://testing-library.com/docs/user-event/intro)
 - [msw](https://mswjs.io/docs/getting-started/install)
 
-## Instalacion con `create-react-app`
+## Instalación con `create-react-app`
 
 Si usaste `create-react-app` no requieres ninguna configuración adicional.
 
