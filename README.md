@@ -172,7 +172,7 @@ En estas pruebas usamos [MSW (Mock Service Worker)](https://mswjs.io/docs/gettin
 
 ## Pruebas a hooks
 
-Aqui no se prueba la interacción con el usuario, sino la lógica interna de un hook.
+Aqui se prueba la lógica interna de un hook.
 
 Se realizan siguiendo los mismos pasos de [pruebas a componentes](#pruebas-a-componentes).
 
