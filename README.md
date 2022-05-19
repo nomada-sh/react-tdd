@@ -1,5 +1,15 @@
 # Pruebas en React
 
+Para ir a alguna parte de la guía de pruebas, puedes usar los siguientes enlaces:
+
+- [Requerimientos](#requerimientos)
+- [Instalación con `create-react-app`](#instalación-con-create-react-app)
+- [Pruebas a componentes](#pruebas-a-componentes)
+- [Pruebas a componentes con llamadas a API](#pruebas-a-componentes-con-llamadas-a-api)
+- [Pruebas a hooks](#pruebas-a-hooks)
+- [Recomendaciones](#recomendaciones)
+- [Referencias](#referencias)
+
 ## Requerimientos
 
 Antes de hacer pruebas con React, debes de tener instaladas las siguientes dependencias:
@@ -28,6 +38,12 @@ yarn test
 ```
 
 Esto ejecutará las pruebas en modo `watch`, es decir, se ejecutarán cada vez que se haga un cambio en el código.
+
+Si solo quieres que se ejecute una prueba, escribes el comando anterior y pones el nombre de la prueba que quieres ejecutar, por ejemplo:
+
+```bash
+yarn test SignInForm
+```
 
 ## Pruebas a componentes
 
@@ -179,3 +195,41 @@ Se realizan siguiendo los mismos pasos de [pruebas a componentes](#pruebas-a-com
 **Ejemplos:**
 
 - [useCounter](./src/hooks/useCounter.test.ts)
+
+## Recomendaciones
+
+- Usar `screen.debug()` para darte una idea de como se renderiza el componente.
+
+  **Ejemplo:**
+
+  ```tsx
+  it('should render a form with a email input', () => {
+    expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
+
+    screen.debug();
+  });
+  ```
+
+  Podremos ver el resultado de `screen.debug()` en la consola:
+
+  ![Salida a consola de screen.debug()](./images/screen-debug-output.png)
+
+## Referencias
+
+### Jest
+
+- [describe](https://jestjs.io/docs/api#describename-fn)
+- [test](https://jestjs.io/docs/api#testname-fn-timeout)
+- [jest.fn()](https://jestjs.io/docs/mock-function-api#jestfnimplementation)
+- [expect](https://jestjs.io/docs/expect#expectvalue)
+  - [.toHaveBeenCalled()](https://jestjs.io/docs/expect#tohavebeencalled)
+  - [.toHaveBeenCalledWith()](https://jestjs.io/docs/expect#tohavebeencalledwitharg1-arg2-)
+
+### React Testing Library
+
+- [Cheatsheet](https://testing-library.com/docs/react-testing-library/cheatsheet/#queries): Una pequeña guía de todas las funciones de React Testing Library.
+
+## MSW (Mock Service Worker)
+
+- [Configuración con Create React App](https://mswjs.io/docs/getting-started/integrate/node#using-create-react-app)
+- [setupServer()](https://mswjs.io/docs/api/setup-server)
