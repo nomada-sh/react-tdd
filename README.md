@@ -229,7 +229,7 @@ Se realizan siguiendo los mismos pasos de [pruebas a componentes](#pruebas-a-com
 
 - [Cheatsheet](https://testing-library.com/docs/react-testing-library/cheatsheet/#queries): Una pequeña guía de todas las funciones de React Testing Library.
 
-## MSW (Mock Service Worker)
+### MSW (Mock Service Worker)
 
 - [Configuración con Create React App](https://mswjs.io/docs/getting-started/integrate/node#using-create-react-app)
 - [setupServer()](https://mswjs.io/docs/api/setup-server)
